@@ -1,17 +1,7 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import Button from "@/components/Button";
-import { useAuthActions } from "@/stores/authStore";
-import React from "react";
-
-const Page = () => {
-  const { logout } = useAuthActions();
-  return (
-    <div>
-      owner dashboard
-      <Button onClick={logout}>Logout</Button>
-    </div>
-  );
+const page = () => {
+  redirect("/owner-dashboard/dashboard");
 };
 
-export default Page;
+export default page;
