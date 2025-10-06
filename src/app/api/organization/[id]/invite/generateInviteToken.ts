@@ -1,4 +1,5 @@
-import generateToken from "@/app/api/helpers/generateToken";
+import generateToken from "@/app/api/auth/helpers/generateToken";
+
 
 export const INVITE_TOKEN_TYPE = "ACCEPT_INVITE";
 
