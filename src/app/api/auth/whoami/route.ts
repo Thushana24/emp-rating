@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import privateRoute from "../helpers/privateRoute";
-import handleError from "../helpers/handleError";
+import privateRoute from "../../helpers/privateRoute";
 import prisma from "@/lib/prisma";
-
+import handleError from "../../helpers/handleError";
 
 export async function GET(request: NextRequest) {
   return privateRoute(

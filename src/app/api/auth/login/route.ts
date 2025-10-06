@@ -2,8 +2,8 @@ import { LoginUserSchema } from "@/schemas/user.schema";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { verify } from "argon2";
-import generateToken, { IJWTPayload } from "../helpers/generateToken";
-import handleError from "../helpers/handleError";
+import handleError from "../../helpers/handleError";
+import generateToken, { IJWTPayload } from "../../helpers/generateToken";
 /**
  * @route POST /api/auth/login
  * @desc Handle user login request and return a success response

@@ -7,7 +7,7 @@ interface UseThrottledSearchParams {
   batchUpdateSearchQuery: (
     appendParams?: Record<string, string>,
     deleteParams?: string[],
-    options?: { useReplace: boolean }
+    options?: { useReplace: boolean },
   ) => void;
   delay?: number; // Optional delay for throttling, defaults to 300ms
 }

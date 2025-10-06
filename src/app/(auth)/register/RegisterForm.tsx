@@ -1,6 +1,7 @@
 "use client";
 
 import { useRegister } from "@/app/api-client/register/useRegister";
+import { CustomError } from "@/app/api/helpers/handleError";
 import Button from "@/components/Button";
 import ErrorMessage from "@/components/Forms/ErrorMessage";
 import Field from "@/components/Forms/Field";
@@ -15,7 +16,6 @@ import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import { IoLockClosed, IoMail, IoPerson } from "react-icons/io5";
 import { BsBuildingFill } from "react-icons/bs";
-import { CustomError } from "@/app/api/auth/helpers/handleError";
 
 const RegisterForm = () => {
   const router = useRouter();

@@ -28,12 +28,12 @@ const OrganizationSelector = () => {
               name="selected_organization"
               onChange={(val) => {
                 const [selected] = memberships.data.filter(
-                  (member) => member.organizationId === val
+                  (member) => member.organizationId === val,
                 );
                 setSelectedOrganization(selected);
                 Cookie.set(
                   cookieKeys.SELECTED_ORGANIZATION,
-                  JSON.stringify(selected)
+                  JSON.stringify(selected),
                 );
               }}
             >

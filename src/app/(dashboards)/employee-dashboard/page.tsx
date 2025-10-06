@@ -2,7 +2,6 @@
 
 import Topbar from "../Topbar";
 
-
 const Page = () => {
   return (
     <section className="flex h-full flex-1 flex-col">

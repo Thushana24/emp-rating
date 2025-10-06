@@ -1,7 +1,7 @@
 "use client";
 
 import { useLogin } from "@/app/api-client/login/useLogin";
-import { CustomError } from "@/app/api/auth/helpers/handleError";
+import { CustomError } from "@/app/api/helpers/handleError";
 import Button from "@/components/Button";
 import ErrorMessage from "@/components/Forms/ErrorMessage";
 import Field from "@/components/Forms/Field";

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import privateRoute from "@/app/api/helpers/privateRoute";
+import handleError from "@/app/api/helpers/handleError";
 import { CriteriaSchema } from "@/schemas/criteria.schema";
-import privateRoute from "@/app/api/auth/helpers/privateRoute";
-import handleError from "@/app/api/auth/helpers/handleError";
 
 export async function PATCH(
   request: NextRequest,

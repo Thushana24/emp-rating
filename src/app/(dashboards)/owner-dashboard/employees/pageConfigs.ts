@@ -1,6 +1,5 @@
 import { RestrictedUserRole } from "@/app/api-client/user/types";
 
-
 export default {
   DEFAULT_PER_PAGE: 25,
   DEFAULT_PAGE: 1,

@@ -1,3 +1,4 @@
+import privateRoute from "@/app/api/helpers/privateRoute";
 import { InviteUserSchema } from "@/schemas/user.schema";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
@@ -9,10 +10,9 @@ import {
 import { hash } from "argon2";
 import generateInviteToken from "./generateInviteToken";
 import InviteUser from "@/email-templates/InviteUser";
+import handleError from "@/app/api/helpers/handleError";
 import { render } from "@react-email/components";
 import { sendEmail } from "@/lib/nodemailer";
-import privateRoute from "@/app/api/auth/helpers/privateRoute";
-import handleError from "@/app/api/auth/helpers/handleError";
 
 const generateRandomPassword = (): string => {
   const array = new Uint32Array(2);

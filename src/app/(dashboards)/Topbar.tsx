@@ -24,7 +24,7 @@ const Topbar = ({ heading, subHeading, Heading }: ITopbar) => {
     <nav
       className={cn(
         "flex w-full items-center justify-between gap-10 border-b border-gray-300 px-5 py-3",
-        { "md:pl-5": !isSidebarExpanded }
+        { "md:pl-5": !isSidebarExpanded },
       )}
     >
       <div className="flex items-center justify-start">

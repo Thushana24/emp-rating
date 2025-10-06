@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import privateRoute from "../../auth/helpers/privateRoute";
-import handleError from "../../auth/helpers/handleError";
+import handleError from "../../helpers/handleError";
+import privateRoute from "../../helpers/privateRoute";
 
 export async function GET(request: NextRequest) {
   return privateRoute(request, { permissions: [] }, async (currentUser) => {

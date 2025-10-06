@@ -32,7 +32,7 @@ interface CreateMutationParams<TData, TParams, TBody, TOptimisticData> {
   optimisticUpdate?: (
     previousValue: TOptimisticData | undefined,
     variables: TBody,
-    params?: TParams
+    params?: TParams,
   ) => TOptimisticData | undefined;
   errorMessage?: string | ((error: AxiosError) => string | null);
   invalidateQueryKey?: unknown[];
@@ -116,7 +116,7 @@ export function useCreateMutation<
 
         if (previousData) {
           queryClient.setQueryData<TOptimisticData>(invalidateQueryKey, (pv) =>
-            optimisticUpdate(pv, variables.body!, variables.params)
+            optimisticUpdate(pv, variables.body!, variables.params),
           );
         }
 
@@ -129,7 +129,7 @@ export function useCreateMutation<
       if (invalidateQueryKey && context?.previousData !== undefined) {
         queryClient.setQueryData<TOptimisticData>(
           invalidateQueryKey,
-          context.previousData
+          context.previousData,
         );
       }
       if (mutationOptions?.onError) {
@@ -243,7 +243,7 @@ export function useCreateInfiniteQuery<
 
   const filteredQueryParams = filterQueryParams(
     queryParams || {},
-    keysToRemove
+    keysToRemove,
   );
 
   return useInfiniteQuery<
@@ -293,7 +293,7 @@ export function useCreateInfiniteQuery<
 
 const filterQueryParams = <T extends Record<string, any>>(
   object: T,
-  keysToRemove: string[]
+  keysToRemove: string[],
 ): Partial<T> => {
   const tempObject = { ...object };
 

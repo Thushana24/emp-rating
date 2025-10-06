@@ -1,4 +1,4 @@
-import type { MotionProps } from "framer-motion";
+import { MotionProps } from "motion/react";
 import type { ComponentProps, JSX, JSXElementConstructor } from "react";
 import React from "react";
 
@@ -23,11 +23,14 @@ export type MotionComponent<
 > = ComponentProps<T> & MotionProps & CustomProps;
 
 export interface PaginatedResult<T> {
-  items: T[];
-  total: number;
-  page: number;
-  size: number;
-  pages: number;
+  success: boolean;
+  data:{
+    items: T[];
+    total: number;
+    page: number;
+    size: number;
+    pages: number;
+  }
 }
 
 export type FeatureFlags = {

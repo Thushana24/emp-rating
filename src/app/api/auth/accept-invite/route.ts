@@ -8,9 +8,9 @@ import {
 import prisma from "@/lib/prisma";
 import { hash } from "argon2";
 import { UserStatus } from "@prisma/client";
+import generateToken, { IJWTPayload } from "../../helpers/generateToken";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/binary";
-import generateToken, { IJWTPayload } from "../helpers/generateToken";
-import handleError from "../helpers/handleError";
+import handleError from "../../helpers/handleError";
 
 export async function POST(request: NextRequest) {
   try {

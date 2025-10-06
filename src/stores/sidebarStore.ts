@@ -7,10 +7,10 @@ interface SidebarState {
   };
   actions: {
     setIsSidebarVisible: (
-      value: boolean | ((value: boolean) => boolean)
+      value: boolean | ((value: boolean) => boolean),
     ) => void;
     setIsSidebarExpanded: (
-      value: boolean | ((value: boolean) => boolean)
+      value: boolean | ((value: boolean) => boolean),
     ) => void;
   };
 }

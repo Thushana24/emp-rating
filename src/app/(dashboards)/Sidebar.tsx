@@ -281,7 +281,7 @@ const NavLink = ({
         "-mx-3 flex flex-shrink-0 cursor-pointer items-center justify-start rounded-xl p-3 py-2 text-sm font-medium whitespace-nowrap text-white",
         { "bg-primary/40": isActive },
         { "hover:bg-primary/20": !isActive },
-        { "gap-2": isSidebarExpanded }
+        { "gap-2": isSidebarExpanded },
       )}
     >
       {Icon && <Icon isActive={isActive} />}
@@ -303,7 +303,7 @@ const NavButton = ({ onClick, Icon, children }: INavButton) => {
       onClick={onClick}
       className={cn(
         "hover:bg-primary/20 -mx-3 flex flex-shrink-0 cursor-pointer items-center justify-start rounded-xl p-3 py-2 text-sm font-medium whitespace-nowrap text-white",
-        { "gap-2": isSidebarExpanded }
+        { "gap-2": isSidebarExpanded },
       )}
     >
       {Icon && <Icon isActive={false} />}
@@ -319,7 +319,7 @@ const Title = ({ className, children, ...rest }: ITitle) => {
     <p
       className={cn(
         "mb-2 truncate text-[0.65rem] font-semibold tracking-wider text-white/60 uppercase",
-        className
+        className,
       )}
       {...rest}
     >

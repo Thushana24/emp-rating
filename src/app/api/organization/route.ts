@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import privateRoute from "../helpers/privateRoute";
 import { OrganizationStatus, UserRole, UserStatus } from "@prisma/client";
 import { OWNER_PERMISSIONS } from "../auth/permissions";
-import privateRoute from "../auth/helpers/privateRoute";
-import generateToken, { IJWTPayload } from "../auth/helpers/generateToken";
-import handleError from "../auth/helpers/handleError";
-
+import handleError from "../helpers/handleError";
+import generateToken, { IJWTPayload } from "../helpers/generateToken";
 
 export async function POST(request: NextRequest) {
   return privateRoute(request, { permissions: [] }, async (curruser) => {

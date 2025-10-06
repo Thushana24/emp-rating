@@ -1,5 +1,7 @@
 "use client";
 
+import { OrganizationEmployeesParams } from "@/app/api-client/organization/employees/types";
+import { useGetAllOrganizationEmployees } from "@/app/api-client/organization/employees/useGetAllOrganizationEmployees";
 import { RestrictedUserRole } from "@/app/api-client/user/types";
 import Button from "@/components/Button";
 import Field from "@/components/Forms/Field";
@@ -7,9 +9,17 @@ import Form from "@/components/Forms/Form";
 import Input from "@/components/Forms/Input";
 import InputGroup from "@/components/Forms/InputGroup";
 import Select from "@/components/Forms/Select";
+import { ResponsivePagination } from "@/components/Pagination";
 import Spinner from "@/components/Spinner";
+import Table from "@/components/Table";
+import UserRoleBadge from "@/components/UserRoleBadge";
+import { Sheet } from "@/components/drawer";
+import useSearchQuery from "@/hooks/useSearchQuery";
+import useThrottledSearch from "@/hooks/useThrottledSearch";
+import { useAuth } from "@/stores/authStore";
+import safeParseInt from "@/utilities/safeParseInt";
 import { format } from "date-fns";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import {
@@ -23,16 +33,6 @@ import { z } from "zod";
 import Topbar from "../../Topbar";
 import pageConfigs from "./pageConfigs";
 import capitalizeFirstLetter from "@/utilities/capitalizeFirstLetter";
-import { useAuth } from "@/stores/authStore";
-import { useGetAllOrganizationEmployees } from "@/app/api-client/organization/employees/useGetAllOrganizationMembers";
-import safeParseInt from "@/utilities/safeParseInt";
-import { OrganizationEmployeesParams } from "@/app/api-client/organization/employees/types";
-import useSearchQuery from "@/hooks/useSearchQuery";
-import useThrottledSearch from "@/hooks/useThrottledSearch";
-import { Sheet } from "@/components/drawer";
-import Table from "@/components/Table";
-import UserRoleBadge from "@/components/UserRoleBadge";
-import { ResponsivePagination } from "@/components/Pagination";
 
 const Page = () => {
   const { selectedOrganization } = useAuth();
@@ -47,7 +47,7 @@ const Page = () => {
   const role = useMemo(() => {
     const roleParam = searchParams.get("role") ?? "";
     return pageConfigs.FILTERS.roles.includes(
-      roleParam as (typeof RestrictedUserRole)[number]
+      roleParam as (typeof RestrictedUserRole)[number],
     )
       ? roleParam
       : "all";
@@ -70,7 +70,7 @@ const Page = () => {
     });
     return Math.max(
       pageConfigs.DEFAULT_PAGE,
-      Math.min(safeParsedPage, pageConfigs.MAX_ALLOWED_PAGE)
+      Math.min(safeParsedPage, pageConfigs.MAX_ALLOWED_PAGE),
     );
   }, [searchParams]);
 
@@ -87,7 +87,7 @@ const Page = () => {
       search: searchParams.get("search") ?? undefined,
       role: role,
     }),
-    [page, size, searchParams, role]
+    [page, size, searchParams, role],
   );
 
   const {
@@ -103,7 +103,7 @@ const Page = () => {
   const numberOfPages = useMemo(() => {
     if (!organizationEmployees) return previousNumberOfPages?.current ?? 0;
 
-    const pages = Math.ceil(organizationEmployees.total / size);
+    const pages = Math.ceil(organizationEmployees.data.total / size);
     previousNumberOfPages.current = pages;
     return pages;
   }, [organizationEmployees, size]);
@@ -163,7 +163,7 @@ const Page = () => {
                       {pageConfigs.FILTERS.roles.map((role) => (
                         <Select.Option key={role} value={role}>
                           {capitalizeFirstLetter(
-                            role.toLowerCase().replaceAll("_", " ")
+                            role.toLowerCase().replaceAll("_", " "),
                           )}
                         </Select.Option>
                       ))}
@@ -256,7 +256,7 @@ const Page = () => {
 
           {!isOrganizationEmployeesLoading &&
             organizationEmployees &&
-            organizationEmployees?.items?.length > 0 && (
+            organizationEmployees?.data?.items?.length > 0 && (
               <Table
                 key="users-table"
                 wrapperClass="mt-5 w-full flex-1 flex-shrink-0 overflow-auto overflow-x-auto"
@@ -272,7 +272,7 @@ const Page = () => {
                 </Table.Thead>
 
                 <Table.Tbody className="divide-gray-100">
-                  {organizationEmployees.items.map((employee) => (
+                  {organizationEmployees.data.items.map((employee) => (
                     <Table.Tr key={employee.id} className="w-full">
                       <Table.Td>
                         <div className="flex items-center justify-start gap-2">
@@ -323,7 +323,7 @@ const Page = () => {
           {!isOrganizationEmployeesLoading &&
             !isOrganizationError &&
             organizationEmployees &&
-            organizationEmployees?.items?.length <= 0 && (
+            organizationEmployees?.data?.items?.length <= 0 && (
               <motion.div
                 key="empty-state"
                 initial={{ filter: "blur(10px)", opacity: 0 }}
@@ -413,8 +413,8 @@ const Page = () => {
 
                 <p className="mt-1 text-xs whitespace-nowrap text-gray-600">
                   Showing:{" "}
-                  {Math.min(size, organizationEmployees?.total ?? 0)} of{" "}
-                  {organizationEmployees?.total ?? 0}
+                  {Math.min(size, organizationEmployees?.data?.total ?? 0)} of{" "}
+                  {organizationEmployees?.data?.total ?? 0}
                 </p>
               </div>
 

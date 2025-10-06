@@ -1,10 +1,9 @@
-
+import privateRoute from "@/app/api/helpers/privateRoute";
 import { AssignEmployeesSchema } from "@/schemas/user.schema";
 import { OrganizationStatus, UserRole, UserStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import privateRoute from "@/app/api/auth/helpers/privateRoute";
-import handleError from "@/app/api/auth/helpers/handleError";
+import handleError from "@/app/api/helpers/handleError";
 
 export async function POST(
   request: NextRequest,

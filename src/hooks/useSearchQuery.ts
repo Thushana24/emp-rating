@@ -22,7 +22,7 @@ const useSearchQuery = () => {
         router.push(url);
       }
     },
-    [router]
+    [router],
   );
 
   const appendToSearchQuery = useCallback(
@@ -36,7 +36,7 @@ const useSearchQuery = () => {
 
       updateSearchQuery(params, options);
     },
-    [updateSearchQuery]
+    [updateSearchQuery],
   );
 
   const deleteFromSearchQuery = useCallback(
@@ -48,14 +48,14 @@ const useSearchQuery = () => {
 
       updateSearchQuery(params, options);
     },
-    [updateSearchQuery]
+    [updateSearchQuery],
   );
 
   const batchUpdateSearchQuery = useCallback(
     (
       appendParams?: AppendParams,
       deleteParams?: string[],
-      options: Options = { useReplace: false }
+      options: Options = { useReplace: false },
     ) => {
       const currentUrl = new URL(window.location.href);
       const params = new URLSearchParams(currentUrl.search);
@@ -74,7 +74,7 @@ const useSearchQuery = () => {
 
       updateSearchQuery(params, options);
     },
-    [updateSearchQuery]
+    [updateSearchQuery],
   );
 
   return {
