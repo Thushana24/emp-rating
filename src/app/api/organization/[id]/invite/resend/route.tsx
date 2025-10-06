@@ -1,14 +1,13 @@
+import privateRoute from "@/app/api/helpers/privateRoute";
 import { NextRequest, NextResponse } from "next/server";
-
+import { ResendInviteSchema } from "@/schemas/user.schema";
+import handleError from "@/app/api/helpers/handleError";
 import { UserStatus } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import generateInviteToken from "../generateInviteToken";
 import InviteUser from "@/email-templates/InviteUser";
 import { sendEmail } from "@/lib/nodemailer";
 import { render } from "@react-email/components";
-import privateRoute from "@/app/api/auth/helpers/privateRoute";
-import { ResendInviteSchema } from "@/schemas/user.schema";
-import handleError from "@/app/api/auth/helpers/handleError";
 
 export async function POST(
   request: NextRequest,

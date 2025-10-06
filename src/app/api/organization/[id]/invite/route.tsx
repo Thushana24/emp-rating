@@ -8,10 +8,10 @@ import {
 } from "@/app/api/auth/permissions";
 import { hash } from "argon2";
 import generateInviteToken from "./generateInviteToken";
-import privateRoute from "@/app/api/auth/helpers/privateRoute";
 import InviteUser from "@/email-templates/InviteUser";
-import { sendEmail } from "@/lib/nodemailer";
 import { render } from "@react-email/components";
+import { sendEmail } from "@/lib/nodemailer";
+import privateRoute from "@/app/api/auth/helpers/privateRoute";
 import handleError from "@/app/api/auth/helpers/handleError";
 
 const generateRandomPassword = (): string => {

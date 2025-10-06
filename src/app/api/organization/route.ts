@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { OrganizationStatus, UserRole, UserStatus } from "@prisma/client";
-import privateRoute from "../auth/helpers/privateRoute";
 import { OWNER_PERMISSIONS } from "../auth/permissions";
+import privateRoute from "../auth/helpers/privateRoute";
 import generateToken, { IJWTPayload } from "../auth/helpers/generateToken";
 import handleError from "../auth/helpers/handleError";
 

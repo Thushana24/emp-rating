@@ -1,6 +1,5 @@
 import generateToken from "@/app/api/auth/helpers/generateToken";
 
-
 export const INVITE_TOKEN_TYPE = "ACCEPT_INVITE";
 
 export interface IJWTInvitePayload extends Record<string, any> {
