@@ -40,6 +40,7 @@ export async function GET(
             some: {
               organizationId,
               role: { in: rolesFilter },
+              status: "ACTIVE",
             },
           },
           ...(search

@@ -81,8 +81,9 @@ const InviteUserSchema = z.object({
     .trim()
     .toLowerCase(),
 
-  role: z.nativeEnum(UserRole).refine((val) => val !== UserRole.OWNER, {
-    message: "The OWNER role is not allowed for invitations",
+  role: z.enum(["SUPERVISOR", "EMPLOYEE"], {
+    required_error: "Role is required",
+    invalid_type_error: "Please select a valid role",
   }),
 });
 

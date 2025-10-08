@@ -33,6 +33,7 @@ import { z } from "zod";
 import Topbar from "../../Topbar";
 import pageConfigs from "./pageConfigs";
 import capitalizeFirstLetter from "@/utilities/capitalizeFirstLetter";
+import InviteUserForm from "./InviteUserForm";
 
 const Page = () => {
   const { selectedOrganization } = useAuth();
@@ -210,9 +211,10 @@ const Page = () => {
                 <div className="flex flex-1 flex-col rounded-xl bg-white p-4 md:mt-0 md:rounded-md md:rounded-r-none">
                   <Sheet.Header className="flex items-start justify-between gap-10">
                     <div className="w-full">
-                      <Sheet.Title>Invite users</Sheet.Title>
+                      <Sheet.Title>Invite Users</Sheet.Title>
                       <Sheet.Description className="mt-1">
                         Add the user&apos;s details and role to send an invite.
+                        <br />
                         Quick and easy!
                       </Sheet.Description>
                     </div>
@@ -228,8 +230,20 @@ const Page = () => {
                   </Sheet.Header>
 
                   {/* body */}
-                  <div className="mt-5 flex flex-1 flex-col">
-                    <p>Invite user form</p>
+                  <div className="mt-10 flex flex-1 flex-col space-y-5">
+                 
+                    <InviteUserForm />
+                  
+
+                    <Sheet.Close asChild>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        className="mt-3 w-full"
+                      >
+                        Cancel
+                      </Button>
+                    </Sheet.Close>
                   </div>
                   {/* body */}
                 </div>

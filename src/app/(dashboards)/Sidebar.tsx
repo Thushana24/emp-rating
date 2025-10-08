@@ -12,9 +12,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { ComponentProps, ReactNode } from "react";
 import { BsBookmarkStarFill } from "react-icons/bs";
 import {
+  IoBookSharp,
+  IoBuildSharp,
   IoChevronForward,
   IoLogOut,
   IoPeopleSharp,
+  IoRibbonSharp,
   IoSettings,
   IoTrendingUpOutline,
 } from "react-icons/io5";
@@ -161,6 +164,36 @@ const Sidebar = () => {
               )}
             >
               {() => <p>Employees</p>}
+            </NavLink>
+            <NavLink
+              href={"/owner-dashboard/manage"}
+              Icon={() => (
+                <div className="bg-primary rounded-xl p-2 text-white shadow-md">
+                  <IoBuildSharp className="size-5" />
+                </div>
+              )}
+            >
+              {() => <p>Manage</p>}
+            </NavLink>
+            <NavLink
+              href={"/owner-dashboard/criterias"}
+              Icon={() => (
+                <div className="bg-primary rounded-xl p-2 text-white shadow-md">
+                  <IoBookSharp className="size-5" />
+                </div>
+              )}
+            >
+              {() => <p>Criterias</p>}
+            </NavLink>
+            <NavLink
+              href={"/owner-dashboard/ratings"}
+              Icon={() => (
+                <div className="bg-primary rounded-xl p-2 text-white shadow-md">
+                  <IoRibbonSharp className="size-5" />
+                </div>
+              )}
+            >
+              {() => <p>Ratings</p>}
             </NavLink>
           </div>
           {/* 

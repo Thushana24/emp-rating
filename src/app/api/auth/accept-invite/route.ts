@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { token, firstName, lastName, password } =
       AcceptInviteUserSchema.parse(body);
+
     const decodedToken = jwt.verify(
       token,
       process.env.JWT_SECRET!,
@@ -34,6 +35,7 @@ export async function POST(request: NextRequest) {
       );
     }
     const hashedPassword = await hash(password);
+
     const result = await prisma.$transaction(async (tx) => {
       await tx.organizationMember.update({
         where: {
