@@ -13,17 +13,16 @@ import { InviteUserSchema } from "@/schemas/user.schema";
 import { useAuth } from "@/stores/authStore";
 import { AxiosError } from "axios";
 import { IoMail } from "react-icons/io5";
-import { useRouter } from "next/navigation";
 import { useInviteUser } from "@/app/api-client/invite/useInviteUser";
 import pageConfigs from "./pageConfigs";
 import capitalizeFirstLetter from "@/utilities/capitalizeFirstLetter";
 
 const InviteUserForm = () => {
   const { selectedOrganization } = useAuth();
-  const router = useRouter();
+  const organizationId = selectedOrganization?.organizationId ?? "";
 
   const { mutateAsync: invite } = useInviteUser({
-    organizationId: selectedOrganization?.organizationId ?? "",
+    organizationId,
   });
 
   return (
@@ -31,11 +30,10 @@ const InviteUserForm = () => {
       validationSchema={InviteUserSchema}
       onSubmit={async (values, methods) => {
         try {
-          const {
-            data:{user}
-          } = await invite({
+          await invite({
             body: values,
           });
+          methods.reset();
         } catch (error) {
           const err = error as AxiosError;
           const errObject = err.response?.data as CustomError;
