@@ -2,7 +2,7 @@ import * as RadixDropdownMenu from "@radix-ui/react-dropdown-menu";
 import { motion, useAnimationControls } from "motion/react";
 import { useContext } from "react";
 import { cn } from "../../utilities/cn";
-import sleep from "../../utilities/sleep";
+
 import { DropdownMenuContext } from "./context";
 
 interface IDropdownItem extends RadixDropdownMenu.DropdownMenuItemProps {
@@ -19,6 +19,11 @@ const DropdownMenuItem = ({
 }: IDropdownItem) => {
   const { closeMenu } = useContext(DropdownMenuContext);
   const animationController = useAnimationControls();
+
+ 
+  function sleep(_ms: number) {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <RadixDropdownMenu.Item

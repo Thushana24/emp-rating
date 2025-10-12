@@ -1,4 +1,3 @@
-import { UserWithOrgMembers } from "@/app/api/auth/types";
 import { useApi } from "@/providers/ApiProvider";
 import { useCreateMutation } from "../apiFactory";
 import { InviteInput, InviteUserResponse } from "./type";

@@ -2,7 +2,6 @@
 import Link from "next/link";
 import React, { useMemo, useRef, useState } from "react";
 import {
-  IoAddSharp,
   IoChevronDown,
   IoChevronForward,
   IoChevronUp,
@@ -16,7 +15,6 @@ import { useAuth } from "@/stores/authStore";
 import useSearchQuery from "@/hooks/useSearchQuery";
 import { Sheet } from "@/components/drawer";
 import Button from "@/components/Button";
-import InviteUserForm from "../employees/InviteUserForm";
 import Form from "@/components/Forms/Form";
 import InputGroup from "@/components/Forms/InputGroup";
 import Field from "@/components/Forms/Field";
@@ -101,7 +99,6 @@ const Page = () => {
   const {
     data: assignedEmployeesResponse,
     isPending: isAssignedEmployeesLoading,
-    isError: isOrganizationError,
   } = useGetEmployees({
     orgId: selectedOrganization?.organizationId || "",
     params: AssignedEmployeesOptions,

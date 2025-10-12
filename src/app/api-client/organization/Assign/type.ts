@@ -4,6 +4,17 @@ import z from "zod";
 
 export type assignEmployeesInput = z.infer<typeof AssignEmployeesSchema>;
 
+export interface AssignEmployeesResponse {
+  success: true;
+  data: {
+    assignedEmployees: number; // Number of employees successfully assigned
+    supervisorId: string; // Supervisor's userId
+    organizationMemberId: string; // Supervisor's OrganizationMember.id
+    organizationId: string; // Organization id
+  };
+}
+
+
 export interface Paginated<T> {
   items: T[];
   total: number;

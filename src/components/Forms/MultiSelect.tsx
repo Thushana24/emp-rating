@@ -2,7 +2,6 @@
 
 import { forwardRef, useState, useRef, useEffect } from "react";
 import type {
-  ListBoxItemProps,
   ValidationResult,
   Selection,
 } from "react-aria-components";
@@ -58,7 +57,7 @@ export const MyMultiSelect = forwardRef<HTMLButtonElement, MyMultiSelectProps>(
     },
     ref,
   ) => {
-    const { id, form, disabled: rootDisabled } = useFieldContext();
+    const { form, disabled: rootDisabled } = useFieldContext();
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const isDisabled =

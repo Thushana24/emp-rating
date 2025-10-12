@@ -1,5 +1,6 @@
 import React, { forwardRef, ComponentProps } from "react";
 import { cn } from "@/utilities/cn";
+import Image from "next/image";
 
 // Main Card Container (like Table)
 interface ICard extends ComponentProps<"div"> {
@@ -242,10 +243,12 @@ const CardAvatar = forwardRef<HTMLDivElement, ICardAvatar>(
         {...rest}
       >
         {src ? (
-          <img
+          <Image
             src={src}
-            alt={alt}
-            className="h-full w-full rounded-full object-cover"
+            alt={alt || "Avatar"}
+            width={48}
+            height={48}
+            className="rounded-full object-cover"
           />
         ) : (
           fallback
