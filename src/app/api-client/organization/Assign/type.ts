@@ -4,39 +4,49 @@ import z from "zod";
 
 export type assignEmployeesInput = z.infer<typeof AssignEmployeesSchema>;
 
-export type AssignEmployeesData = {
-  assignedEmployees: number;
+export interface Paginated<T> {
+  items: T[];
+  total: number;
+  page: number;
+  size: number;
+  pages: number;
+}
+
+
+
+// ✅ Single supervisor with employees
+export type SupervisorAssignedEmployees = {
   supervisorId: string;
-  organizationId: string;
-};
-
-export type AssignEmployeesResponse = {
-  success: true;
-  data: AssignEmployeesData;
-};
-
-type AssignedEmployeesResponse = {
-  supervisors: {
-    supervisorId: string;
-    supervisorName: string;
-    role: UserRole;
-    status: string;
-    employees: {
-      employeeId: string;
-      employeeName: string;
-      role: UserRole;
-      status: string;
-    }[];
-  }[];
-  unassignedEmployees: {
+  firstName: string;
+  lastName: string;
+  role: UserRole;
+  status: string;
+  employees: {
     employeeId: string;
-    employeeName: string;
+    firstName: string;
+    lastName: string;
     role: UserRole;
     status: string;
   }[];
 };
 
+
+// API response structure
+export type AssignedEmployeesResponse = {
+  assigned: Paginated<SupervisorAssignedEmployees>;
+  unassigned: Paginated<{
+    employeeId: string;
+    firstName: string;
+    lastName: string;
+    role: UserRole;
+    status: string;
+  }>;
+};
+
+// Full API response
 export type AssignedEmployeesApiResponse = {
   success: boolean;
   data: AssignedEmployeesResponse;
 };
+
+

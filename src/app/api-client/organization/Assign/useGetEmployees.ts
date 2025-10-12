@@ -4,7 +4,7 @@ import { OrganizationEmployeesParams } from "../employees/types";
 import { AssignedEmployeesKey, EAssignedEmployees } from "./config";
 import { AssignedEmployeesApiResponse } from "./type";
 
-export const useGetAssignedEmployees = ({
+export const useGetEmployees = ({
   orgId,
   params,
 }: {
@@ -17,7 +17,7 @@ export const useGetAssignedEmployees = ({
     queryKey: AssignedEmployeesKey[EAssignedEmployees.FETCH_ALL],
     apiClient: jsonApiClient,
     url: `/organization/${orgId}/assign-employee-to-supervisor`,
-    errorMessage: "Failed to fetch assigned employees.",
+    errorMessage: "Failed to fetch assigned/unassigned employees.",
     queryOptions: {
       enabled: !!orgId,
     },

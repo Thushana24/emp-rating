@@ -1,7 +1,7 @@
 "use client";
 
 import { useAssignEmployees } from "@/app/api-client/organization/Assign/useAssignEmployees";
-import { useGetAssignedEmployees } from "@/app/api-client/organization/Assign/useGetUnAssignedEmployees";
+import { useGetEmployees } from "@/app/api-client/organization/Assign/useGetEmployees";
 import { useGetAllOrganizationEmployees } from "@/app/api-client/organization/employees/useGetAllOrganizationEmployees";
 import { CustomError } from "@/app/api/helpers/handleError";
 import Button from "@/components/Button";
@@ -30,7 +30,7 @@ const AssignEmployeesForm = () => {
 
   // Fetch assigned/unassigned employees
   const { data: employeesData, isLoading: loadingEmployees } =
-    useGetAssignedEmployees({
+    useGetEmployees({
       orgId: organizationId,
       params: { role: "EMPLOYEE" },
     });
@@ -38,9 +38,9 @@ const AssignEmployeesForm = () => {
   // Transform unassigned employees data to options format
   const employeeOptions = useMemo(() => {
     return (
-      employeesData?.data?.unassignedEmployees.map((employee) => ({
-        value: employee.employeeId,
-        label: employee.employeeName,
+      employeesData?.data?.unassigned?.items?.map((emp) => ({
+        value: emp.employeeId,
+        label: emp.firstName,
       })) ?? []
     );
   }, [employeesData]);

@@ -142,8 +142,6 @@ return NextResponse.json(
   );
 }
 
-
-
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -158,26 +156,47 @@ export async function GET(
     },
     async () => {
       try {
-        // ✅ Check if organization exists
-        const organization = await prisma.organization.findUnique({
+        const searchParams = request.nextUrl.searchParams;
+        const search = (searchParams.get("search") || "").trim();
+
+        // Assigned supervisors pagination
+        const assignedPage = Math.max(
+          parseInt(searchParams.get("assignedPage") || "1", 10),
+          1,
+        );
+        const assignedSize = Math.min(
+          parseInt(searchParams.get("assignedSize") || "10", 10),
+          100,
+        );
+        const assignedSkip = (assignedPage - 1) * assignedSize;
+
+        // Unassigned employees pagination
+        const unassignedPage = Math.max(
+          parseInt(searchParams.get("unassignedPage") || "1", 10),
+          1,
+        );
+        const unassignedSize = Math.min(
+          parseInt(searchParams.get("unassignedSize") || "10", 10),
+          100,
+        );
+        const unassignedSkip = (unassignedPage - 1) * unassignedSize;
+
+        // ✅ Validate organization
+        const org = await prisma.organization.findUnique({
           where: { id: organizationId, status: OrganizationStatus.ACTIVE },
           select: { id: true },
         });
+        if (!org) throw new Error("ORG_NOT_FOUND");
 
-        if (!organization) {
-          return NextResponse.json(
-            {
-              success: false,
-              error: {
-                code: "ORG_NOT_FOUND",
-                message: "Organization not found or inactive.",
-              },
-            },
-            { status: 404 },
-          );
-        }
+        // ✅ Fetch assigned supervisors with employees
+        const totalSupervisors = await prisma.organizationMember.count({
+          where: {
+            organizationId,
+            role: UserRole.SUPERVISOR,
+            status: UserStatus.ACTIVE,
+          },
+        });
 
-        // ✅ Fetch supervisors with their employees
         const supervisors = await prisma.organizationMember.findMany({
           where: {
             organizationId,
@@ -188,99 +207,118 @@ export async function GET(
             userId: true,
             role: true,
             status: true,
-            User: {
-              select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                email: true,
-              },
-            },
+            User: { select: { firstName: true, lastName: true, email: true } },
             Employees: {
-              where: { role: UserRole.EMPLOYEE },
+              where: { role: UserRole.EMPLOYEE, status: UserStatus.ACTIVE },
               select: {
                 userId: true,
                 role: true,
                 status: true,
                 User: {
-                  select: {
-                    id: true,
-                    firstName: true,
-                    lastName: true,
-                    email: true,
-                  },
+                  select: { firstName: true, lastName: true, email: true },
                 },
               },
             },
           },
+          skip: assignedSkip,
+          take: assignedSize,
+          orderBy: { createdAt: "desc" },
         });
 
-        // ✅ Fetch all employees
-        const allEmployees = await prisma.organizationMember.findMany({
-          where: {
-            organizationId,
-            role: UserRole.EMPLOYEE,
-            status: UserStatus.ACTIVE,
-          },
+        // ✅ Collect assigned employee IDs and supervisor IDs to exclude
+        const assignedEmployeeIds = supervisors.flatMap((sup) =>
+          sup.Employees.map((emp) => emp.userId),
+        );
+        const supervisorIds = supervisors.map((sup) => sup.userId);
+
+        // ✅ Fetch unassigned employees
+        const whereUnassigned: any = {
+          organizationId,
+          role: UserRole.EMPLOYEE,
+          status: UserStatus.ACTIVE,
+          userId: { notIn: [...assignedEmployeeIds, ...supervisorIds] }, // exclude supervisors too
+        };
+
+        if (search) {
+          whereUnassigned.OR = [
+            { User: { firstName: { contains: search, mode: "insensitive" } } },
+            { User: { lastName: { contains: search, mode: "insensitive" } } },
+            { User: { email: { contains: search, mode: "insensitive" } } },
+          ];
+        }
+
+        const totalUnassigned = await prisma.organizationMember.count({
+          where: whereUnassigned,
+        });
+        const unassignedEmployees = await prisma.organizationMember.findMany({
+          where: whereUnassigned,
           select: {
             userId: true,
             role: true,
             status: true,
-            User: {
-              select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                email: true,
-              },
-            },
+            User: { select: { firstName: true, lastName: true, email: true } },
           },
+          skip: unassignedSkip,
+          take: unassignedSize,
+          orderBy: { createdAt: "desc" },
         });
 
-        // ✅ Get IDs of assigned employees
-        const assignedEmployeeIds = supervisors.flatMap((sup) =>
-          sup.Employees.map((emp) => emp.userId),
-        );
+        // ✅ Transform and return response
+        // ✅ Transform and return response
+return NextResponse.json(
+  {
+    success: true,
+    data: {
+      assigned: {
+        items: supervisors.map((sup) => ({
+          supervisorId: sup.userId,
+          firstName: sup.User.firstName,
+          lastName: sup.User.lastName,
+          role: sup.role,
+          status: sup.status,
+          employees: sup.Employees.map((emp) => ({
+            employeeId: emp.userId,
+           firstName: emp.User.firstName,
+            lastName: emp.User.lastName,
+            role: emp.role,
+            status: emp.status,
+          })),
+        })),
+        total: totalSupervisors,
+        page: assignedPage,
+        size: assignedSize,
+        pages: Math.max(1, Math.ceil(totalSupervisors / assignedSize)),
+      },
+      unassigned: {
+        items: unassignedEmployees.map((emp) => ({
+          employeeId: emp.userId,
+          employeeFirstName: emp.User.firstName,
+          employeeLastName: emp.User.lastName,
+          role: emp.role,
+          status: emp.status,
+        })),
+        total: totalUnassigned,
+        page: unassignedPage,
+        size: unassignedSize,
+        pages: Math.max(1, Math.ceil(totalUnassigned / unassignedSize)),
+      },
+    },
+  },
+  { status: 200 },
+);
 
-        // ✅ Filter unassigned employees
-        const unassignedEmployees = allEmployees.filter(
-          (emp) => !assignedEmployeeIds.includes(emp.userId),
+      } catch (error: any) {
+        return handleError(
+          error,
+          "Failed to fetch assigned/unassigned employees",
         );
-
-        // ✅ Transform data to consistent response format
-        return NextResponse.json(
-          {
-            success: true,
-            data: {
-              supervisors: supervisors.map((sup) => ({
-                supervisorId: sup.userId,
-                supervisorName:
-                  sup.User.firstName || sup.User.email || "Unnamed Supervisor",
-                role: sup.role,
-                status: sup.status,
-                employees: sup.Employees.map((emp) => ({
-                  employeeId: emp.userId,
-                  employeeName:
-                    emp.User.firstName || emp.User.email || "Unnamed Employee",
-                  role: emp.role,
-                  status: emp.status,
-                })),
-              })),
-              unassignedEmployees: unassignedEmployees.map((emp) => ({
-                employeeId: emp.userId,
-                employeeName:
-                  emp.User.firstName || emp.User.email || "Unnamed Employee",
-                role: emp.role,
-                status: emp.status,
-              })),
-            },
-          },
-          { status: 200 },
-        );
-      } catch (error) {
-        return handleError(error, "Failed to fetch supervisors with employees");
       }
     },
   );
 }
+
+
+
+
+
 
