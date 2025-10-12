@@ -1,8 +1,8 @@
+import { UserRole } from '@prisma/client';
 import cookieKeys from "@/configs/cookieKeys";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { UserWithOrgMembers } from "./app/api/auth/types";
-import { UserRole } from "@prisma/client";
 
 export async function middleware(request: NextRequest, _: NextResponse) {
   const session = request.cookies.get(cookieKeys.USER_TOKEN);

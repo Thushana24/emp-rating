@@ -138,6 +138,10 @@ const AssignEmployeesSchema = z.object({
   employeeIds: z.array(z.string()).nonempty(),
 });
 
+// src/schemas/user.schema.ts
+export type UserRole = 'OWNER' | 'SUPERVISOR' | 'EMPLOYEE';
+
+
 export {
   InviteUserSchema,
   LoginUserSchema,
