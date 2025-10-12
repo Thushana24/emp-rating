@@ -2,7 +2,6 @@
 
 import Spinner from "@/components/Spinner";
 import { useAuth } from "@/stores/authStore";
-import { UserRole } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -14,15 +13,15 @@ const Home = () => {
     if (user && selectedOrganization && user.OrganizationMembers.length > 0) {
       const role = selectedOrganization.role;
 
-      if (role === UserRole.OWNER) {
+      if (role === "OWNER") {
         router.push("/owner-dashboard");
       }
 
-      if (role === UserRole.SUPERVISOR) {
+      if (role === "SUPERVISOR") {
         router.push("/supervisor-dashboard");
       }
 
-      if (role === UserRole.EMPLOYEE) {
+      if (role === "EMPLOYEE") {
         router.push("/employee-dashboard");
       }
     }
