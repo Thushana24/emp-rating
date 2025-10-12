@@ -42,3 +42,6 @@ export type FeatureFlags = {
   copilot: boolean;
   configurations: boolean;
 };
+
+// src/schemas/user.schema.ts
+export type UserRole = 'OWNER' | 'SUPERVISOR' | 'EMPLOYEE';

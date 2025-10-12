@@ -1,69 +1,64 @@
-import { UserRole } from '@prisma/client';
-import cookieKeys from "@/configs/cookieKeys";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { UserWithOrgMembers } from "./app/api/auth/types";
 
-export async function middleware(request: NextRequest, _: NextResponse) {
-  const session = request.cookies.get(cookieKeys.USER_TOKEN);
-  const sessionUser = request.cookies.get(cookieKeys.USER);
-  const user = JSON.parse(
-    sessionUser?.value || "null",
-  ) as UserWithOrgMembers | null;
+const USER_TOKEN = "er-user-token";
+const USER = "er-user";
+
+export async function middleware(request: NextRequest) {
+  const session = request.cookies.get(USER_TOKEN);
+  const sessionUser = request.cookies.get(USER);
+  let user: UserWithOrgMembers | null = null;
+
+  try {
+    user = JSON.parse(sessionUser?.value || "null");
+  } catch {
+    user = null;
+  }
 
   const onlyPublicRoutes = ["/login", "/register"];
-
   const isOnlyPublic = onlyPublicRoutes.includes(request.nextUrl.pathname);
 
   if (!session && !isOnlyPublic) {
     const url = new URL("/login", request.url);
-
-    // Preserve all existing query parameters
-    for (const [key, value] of request.nextUrl.searchParams.entries()) {
-      url.searchParams.append(key, value);
-    }
-
-    // Add redirect_to parameter if it's not already present
     if (!url.searchParams.has("redirect_to")) {
       url.searchParams.set("redirect_to", request.nextUrl.pathname);
     }
-
     return NextResponse.redirect(url);
   }
 
   if (session && isOnlyPublic) {
-    return NextResponse.redirect(new URL(`/`, request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   if (session && !isOnlyPublic) {
-    if (request.nextUrl.pathname.includes("owner-dashboard")) {
-      if (
-        !user?.OrganizationMembers.some((org) => org.role === UserRole.OWNER)
-      ) {
-        return NextResponse.redirect(new URL(`/`, request.url));
-      }
+    const path = request.nextUrl.pathname;
+
+    if (
+      path.includes("owner-dashboard") &&
+      !user?.OrganizationMembers.some((org) => org.role === "OWNER")
+    ) {
+      return NextResponse.redirect(new URL("/", request.url));
     }
 
-    if (request.nextUrl.pathname.includes("employee-dashboard")) {
-      if (
-        !user?.OrganizationMembers.some((org) => org.role === UserRole.EMPLOYEE)
-      ) {
-        return NextResponse.redirect(new URL(`/`, request.url));
-      }
+    if (
+      path.includes("employee-dashboard") &&
+      !user?.OrganizationMembers.some((org) => org.role === "EMPLOYEE")
+    ) {
+      return NextResponse.redirect(new URL("/", request.url));
     }
 
-    if (request.nextUrl.pathname.includes("supervisor-dashboard")) {
-      if (
-        !user?.OrganizationMembers.some(
-          (org) => org.role === UserRole.SUPERVISOR,
-        )
-      ) {
-        return NextResponse.redirect(new URL(`/`, request.url));
-      }
+    if (
+      path.includes("supervisor-dashboard") &&
+      !user?.OrganizationMembers.some((org) => org.role === "SUPERVISOR")
+    ) {
+      return NextResponse.redirect(new URL("/", request.url));
     }
 
     return NextResponse.next();
   }
+
+  return NextResponse.next();
 }
 
 export const config = {
